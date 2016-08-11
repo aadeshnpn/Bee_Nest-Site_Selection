@@ -5,4 +5,5 @@ Stability of Choice in the Honey Bee Nest-Site Selection Process
 python siteselectionfinal.py
 
 ##Sample Graphs
-/home/tensor/Pictures/single_site_quram.png
+![Alt tag](https://github.com/aadeshnpn/Bee_Nest-Site_Selection/blob/master/single_site_quram.png?raw=true)
+
