@@ -1,7 +1,7 @@
 #!/bin/env python
 
 import random
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import numpy as np
 #Author: Aadeshnpn
 ##Nest site selection process start when a cluster is formed
@@ -78,12 +78,7 @@ Q_ast2=0.500 #(A_ast=A_q)
 t_o=list(range(1,3000)) #varied between simulations
 #Rec_0=(1/(e*n*v))*(1/((1/b)+(1/c)))
 #Abs_0=b/(e*n*v)
-##Initial Setting
-R=[]
-O=[]
-E=[]
-A=[]
-D=[]
+
 #R_0=0.0
 #O_0=c/(b+c)
 #E_0=E_bar-A_0
@@ -95,6 +90,12 @@ D=[]
 #exit(1)
 def single_site_model(R_0,O_0,E_0,A_0,D_0,a,b,c,v,w,m,n,Aq,stopval=3000):
     tq=[]
+    ##Initial Setting
+    R=[]
+    O=[]
+    E=[]
+    A=[]
+    D=[]
     for i in t_o:
         R_dot=-a*R_0+v*n*D_0
         O_dot=a*R_0-b*O_0+c*E_0
@@ -103,17 +104,17 @@ def single_site_model(R_0,O_0,E_0,A_0,D_0,a,b,c,v,w,m,n,Aq,stopval=3000):
         E_dot=q_d*b*O_0-c*E_0
         A_dot=p_d*b*O_0-m*A_0+w*n*D_0
         D_dot=m*A_0-n*D_0
-        R_0=R_0+R_dot
-        O_0=O_0+O_dot
-        E_0=E_0+E_dot
-        A_0=A_0+A_dot
-        D_0=D_0+D_dot
+        R_0=R_0+R_dot;R.append(R_0)
+        O_0=O_0+O_dot;O.append(O_0)
+        E_0=E_0+E_dot;E.append(E_0)
+        A_0=A_0+A_dot;A.append(A_0)
+        D_0=D_0+D_dot;D.append(D_0)
         if A_0>=Aq:
             tq.append(i)
         if i>=stopval:
             break
     print ("Final values of : R,O,E,A,D",i,R_0,O_0,E_0,A_0,D_0)
-    return R_0,O_0,E_0,A_0,D_0,tq
+    return R_0,O_0,E_0,A_0,D_0,tq,R,O,E,A,D
 
 def two_site_model(R_0,O_0,E_0,A_1,D_1,A_2,D_2,a,b,c,v1,v2,w1,w2,m,n1,n2,Aq):
     #R,O,E,A1,D1,A2,D2,tq=two_site_model(R0,O0,E0-A_0,A0,D0,A_0,0,a,b,c,v1,v2,w1,w2,m,n1,n2,A_q)
@@ -212,7 +213,14 @@ def run_single_model():
         n=0.066/Q
         v=1-Q
         w=Q
-        R,O,E,A,D,tq=single_site_model(0,O_bar,E_bar-A_0,A_0,0,a,b,c,v,w,m,n,A_q)
+        R,O,E,A,D,tq,rlist,olist,elist,alist,dlist=single_site_model(0,O_bar,E_bar-A_0,A_0,0,a,b,c,v,w,m,n,A_q)
+        rlist=np.array(rlist);olist=np.array(olist);np.array(elist);np.array(alist);np.array(dlist)
+        plt.plot(np.array(list(range(1,3000))),rlist,'b*')
+        plt.plot(np.array(list(range(1,3000))),olist,'b--')
+        plt.plot(np.array(list(range(1,3000))),elist,'g^')
+        plt.plot(np.array(list(range(1,3000))),alist,'r--')
+        plt.plot(np.array(list(range(1,3000))),dlist,'bs')                
+        plt.show()
         interested_equilibrium(e,n,v,b,c,m,Q)
         if len(tq)!=0:
             print ("Quorum time achieved at %f hrs:",tq[0]/(60.0))
@@ -230,7 +238,7 @@ def run_double_model():
     v2=1-Q2
     w1=Q1
     w2=Q2
-    R0,O0,E0,A0,D0,tq=single_site_model(0,O_bar,E_bar-A_0,A_0,0,a,b,c,v1,w1,m,n1,A_q,60)
+    R0,O0,E0,A0,D0,tq,rlist,rlist,rlist,rlist,rlist=single_site_model(0,O_bar,E_bar-A_0,A_0,0,a,b,c,v1,w1,m,n1,A_q,60)
     R,O,E,A1,D1,A2,D2,tq1,tq2=two_site_model(R0,O0,E0-A_0,A0,D0,A_0,0,a,b,c,v1,v2,w1,w2,m,n1,n2,A_q)
     #interested_equilibrium(e,n,v,b,c,m,Q)
     if len(tq1)!=0:
