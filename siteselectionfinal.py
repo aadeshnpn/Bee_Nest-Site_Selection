@@ -66,28 +66,14 @@ m=0.050 #20 min assessing
 σ=0.1   #consecutive waggle runs start 6 secs apart
 M=150   #150 waggle runs for a perfect site
 e=0.323 #chose so taht Q* =0.450
-#Q=round(random.random(),3) #(0,1) #varied between simulations
-
 A_0=0.005     #200 scount bees
 A_q=0.1       #20 accessing bees produce quorum [20,22]
 O_bar=0.211
 E_bar=0.789
 Q_ast=0.450  #(A_ast=0)
-#Q_ast=(e*((1/b)+(1/c)))/(e*((1/b)+(1/c))+σ*M)
 Q_ast2=0.500 #(A_ast=A_q)
 t_o=list(range(1,3000)) #varied between simulations
-#Rec_0=(1/(e*n*v))*(1/((1/b)+(1/c)))
-#Abs_0=b/(e*n*v)
 
-#R_0=0.0
-#O_0=c/(b+c)
-#E_0=E_bar-A_0
-#A_0=A_0
-#D_0=0.0
-
-#print (R_0,O_0,E_0,A_0,D_0)
-#print ("The sum is ",round(R_0+O_0+E_0+A_0+D_0,2))
-#exit(1)
 def single_site_model(R_0,O_0,E_0,A_0,D_0,a,b,c,v,w,m,n,Aq,stopval=3000):
     tq=[]
     ##Initial Setting
@@ -193,14 +179,6 @@ def interested_equilibrium(e,n,v,b,c,m,Q):
         print ("Interested Equlibrium constitutes a PIE with A* and Aq as:",A_ast,A_q)
     else:
         print ("Interested Equlibrium constitutes a FIE with A* and Aq as:",A_ast,A_q)
-    #print ("Values are:",0,O_bar,E_bar-A_0,A_0,0)
-    #for i in t_o:
-    #    O_0=(-b*O_ast+c*(E_ast-A_0))*1
-    #    print (O_0)
-
-                
-def influence_on_site(e,b,c,M,σ):
-    pass
     
 #existence_of_solution()    
 #disinterested_equilibrium(e,n,v,b,c)
@@ -247,6 +225,6 @@ def run_double_model():
     if len(tq2)!=0:
         print ("Quorum time achieved for site2 at  hrs:",tq2[0]/(60.0))
     print ("---------------------------------------------")
-                
-#run_single_model()
-run_double_model()
+                    
+run_single_model()
+#run_double_model()
