@@ -1,12 +1,16 @@
 #!/bin/env python
-
-import random
-import matplotlib.pyplot as plt
-import numpy as np
 #Author: Aadeshnpn
 ##Nest site selection process start when a cluster is formed
 ##by the colony splitting itself when the queen & about half the old colony depart
+##References: Stability of Choice in the Honey Bee Nest-Site Selection Processes, Andrew L. Nevai, Kevin M. Passion, and Parthasarathy Srinivasan
+import random
+import matplotlib.pyplot as plt
+import numpy as np
+import argparse
 
+parser=argparse.ArgumentParser(description='Stability of Choice in the Honey Bee Nest-Site Selection Processes')
+parser.add_argument('--single_site', metavar='base',type=str, help='Single site model')
+parser.add_argument('--two_site', metavar='base',type=str, help='Two site model')
 ##Important Notation
 #R -> fraction of bees resting
 #O -> fraction of bees observing
@@ -261,6 +265,21 @@ def run_double_model():
     if len(tq2)!=0:
         print ("Quorum time achieved for site2 at  hrs:",tq2[0]/(60.0))
     print ("---------------------------------------------")
-                    
-#run_single_model()
-run_double_model()
+
+
+def main():
+    args=parser.parse_args()
+    singlemodel=args.single_site
+    twomodel=args.two_site
+    if singlemodel == 'Y':
+        run_single_model()
+    elif twomodel == 'Y':
+        run_double_model()
+    else:
+        print ("No model selected\n")
+        print ("Usages: siteselectionfinal.py --single_site Y\n")
+        print ("Usages: siteselectionfinal.py --two_site Y\n")
+
+if __name__ == '__main__':
+    main()
+
