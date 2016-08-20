@@ -102,10 +102,11 @@ def single_site_model(R_0,O_0,E_0,A_0,D_0,a,b,c,v,w,m,n,Aq,stopval=3000):
     print ("Final values of : R,O,E,A,D",i,R_0,O_0,E_0,A_0,D_0)
     return R_0,O_0,E_0,A_0,D_0,tq,R,O,E,A,D
 
-def two_site_model(R_0,O_0,E_0,A_1,D_1,A_2,D_2,a,b,c,v1,v2,w1,w2,m,n1,n2,Aq):
+def two_site_model(R_0,O_0,E_0,A_1,D_1,A_2,D_2,a,b,c,v1,v2,w1,w2,m,n1,n2,Aq,stopval=3000):
     #R,O,E,A1,D1,A2,D2,tq=two_site_model(R0,O0,E0-A_0,A0,D0,A_0,0,a,b,c,v1,v2,w1,w2,m,n1,n2,A_q)
     tq1=[]
     tq2=[]
+    R=[];O=[];E=[];A1=[];A2=[];D1=[];D2=[]
     for i in t_o:
         R_dot=-a*R_0+v1*n1*D_1+v2*n2*D_2
         O_dot=a*R_0-b*O_0+c*E_0
@@ -116,19 +117,21 @@ def two_site_model(R_0,O_0,E_0,A_1,D_1,A_2,D_2,a,b,c,v1,v2,w1,w2,m,n1,n2,Aq):
         A_2dot=(D_2/(D_1+D_2+e))*b*O_0-m*A_2+w2*n2*D_2
         D_1dot=m*A_1-n1*D_1
         D_2dot=m*A_2-n2*D_2
-        R_0=R_0+R_dot
-        O_0=O_0+O_dot
-        E_0=E_0+E_dot
-        A_1=A_1+A_1dot
-        A_2=A_2+A_2dot
-        D_1=D_1+D_1dot
-        D_2=D_2+D_2dot
+        R_0=R_0+R_dot;R.append(R_0)
+        O_0=O_0+O_dot;O.append(O_0)
+        E_0=E_0+E_dot;E.append(E_0)
+        A_1=A_1+A_1dot;A1.append(A_1)
+        A_2=A_2+A_2dot;A2.append(A_2)
+        D_1=D_1+D_1dot;D1.append(D_1)
+        D_2=D_2+D_2dot;D2.append(D_2)
         if A_2>=Aq:
             tq2.append(i)
         if A_1>=Aq:
             tq1.append(i)
+        if i>=stopval:
+            break
     print ("Final values of : R,O,E,A1,D1,A2,D2",i,R_0,O_0,E_0,A_1,D_1,A_2,D_2)
-    return R_0,O_0,E_0,A_1,D_1,A_2,D_2,tq1,tq2
+    return R_0,O_0,E_0,A_1,D_1,A_2,D_2,tq1,tq2,R,O,E,A1,A2,D1,D2
     
 def existence_of_solution():
     R_ast=R_0
@@ -190,13 +193,36 @@ def plotGraph(rlist,olist,elist,alist,dlist,Q,Aq,Q_ast,Q_ast2,rang=3000):
     elist=np.array(elist)
     alist=np.array(alist)
     dlist=np.array(dlist)
-    plt.plot(np.array(list(range(1,rang))),rlist,'b*')
-    plt.plot(np.array(list(range(1,rang))),olist,'b--')
-    plt.plot(np.array(list(range(1,rang))),elist,'g^')
-    plt.plot(np.array(list(range(1,rang))),alist,'r--')
-    plt.plot(np.array(list(range(1,rang))),dlist,'bs')                
+    plt.plot(np.array(list(range(1,rang))),rlist,'b*',label="R")
+    plt.plot(np.array(list(range(1,rang))),olist,'b--',label="O")
+    plt.plot(np.array(list(range(1,rang))),elist,'g^',label="E")
+    plt.plot(np.array(list(range(1,rang))),alist,'r--',label="A")
+    plt.plot(np.array(list(range(1,rang))),dlist,'bs',label="D")
+    plt.xlabel('Time (Mins)')
+    plt.title('Assessment (Q = %0.2f)' % Q)
+    plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+    #plt.ylabel('Time (Mins)')
     plt.show()
-    
+
+def plotGraph2(rlist,olist,elist,a1list,a2list,d1list,d2list,Q1,Q2,t0,rang=3000):
+    rlist=np.array(rlist)
+    olist=np.array(olist)
+    elist=np.array(elist)
+    a1list=np.array(a1list)
+    a2list=np.array(a2list)
+    d1list=np.array(d1list)
+    d2list=np.array(d2list)
+    #plt.plot(np.array(list(range(1,rang))),rlist,'b*',label="R")
+    plt.plot(np.array(list(range(1,rang))),olist,'b--',label="O")
+    plt.plot(np.array(list(range(1,rang))),elist,'g^',label="E")
+    plt.plot(np.array(list(range(1,rang))),a1list,'r--',label="A1")
+    plt.plot(np.array(list(range(1,rang))),a2list,'bs',label="A2")
+    plt.xlabel('Time (Mins)')
+    plt.title('Discrimination (Q1 = %0.2f, Q2 = %0.2f,t(o) = %d mins)' % (Q1,Q2,t0))
+    plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+    #plt.ylabel('Time (Mins)')
+    plt.show()
+            
 def run_single_model():
     for Q in [0.45,0.48,0.50,0.55]:
         #print (Q)
@@ -224,8 +250,10 @@ def run_double_model():
     v2=1-Q2
     w1=Q1
     w2=Q2
-    R0,O0,E0,A0,D0,tq,rlist,rlist,rlist,rlist,rlist=single_site_model(0,O_bar,E_bar-A_0,A_0,0,a,b,c,v1,w1,m,n1,A_q,60)
-    R,O,E,A1,D1,A2,D2,tq1,tq2=two_site_model(R0,O0,E0-A_0,A0,D0,A_0,0,a,b,c,v1,v2,w1,w2,m,n1,n2,A_q)
+    t0=120
+    R0,O0,E0,A0,D0,tq,rlist,rlist,rlist,rlist,rlist=single_site_model(0,O_bar,E_bar-A_0,A_0,0,a,b,c,v1,w1,m,n1,A_q,t0)
+    R,O,E,A1,D1,A2,D2,tq1,tq2,rlist,olist,elist,a1list,a2list,d1list,d2list=two_site_model(R0,O0,E0-A_0,A0,D0,A_0,0,a,b,c,v1,v2,w1,w2,m,n1,n2,A_q)
+    plotGraph2(rlist,olist,elist,a1list,a2list,d1list,d2list,Q1,Q2,t0)
     #interested_equilibrium(e,n,v,b,c,m,Q)
     if len(tq1)!=0:
         print ("Quorum time achieved for site1 at  hrs:",tq1[0]/(60.0))
@@ -234,5 +262,5 @@ def run_double_model():
         print ("Quorum time achieved for site2 at  hrs:",tq2[0]/(60.0))
     print ("---------------------------------------------")
                     
-run_single_model()
-#run_double_model()
+#run_single_model()
+run_double_model()
