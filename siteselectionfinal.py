@@ -184,6 +184,19 @@ def interested_equilibrium(e,n,v,b,c,m,Q):
 #disinterested_equilibrium(e,n,v,b,c)
 #interested_equilibrium(e,n,v,b,c,m)
 
+def plotGraph(rlist,olist,elist,alist,dlist,Q,Aq,Q_ast,Q_ast2,rang=3000):
+    rlist=np.array(rlist)
+    olist=np.array(olist)
+    elist=np.array(elist)
+    alist=np.array(alist)
+    dlist=np.array(dlist)
+    plt.plot(np.array(list(range(1,rang))),rlist,'b*')
+    plt.plot(np.array(list(range(1,rang))),olist,'b--')
+    plt.plot(np.array(list(range(1,rang))),elist,'g^')
+    plt.plot(np.array(list(range(1,rang))),alist,'r--')
+    plt.plot(np.array(list(range(1,rang))),dlist,'bs')                
+    plt.show()
+    
 def run_single_model():
     for Q in [0.45,0.48,0.50,0.55]:
         #print (Q)
@@ -192,13 +205,8 @@ def run_single_model():
         v=1-Q
         w=Q
         R,O,E,A,D,tq,rlist,olist,elist,alist,dlist=single_site_model(0,O_bar,E_bar-A_0,A_0,0,a,b,c,v,w,m,n,A_q)
-        rlist=np.array(rlist);olist=np.array(olist);np.array(elist);np.array(alist);np.array(dlist)
-        plt.plot(np.array(list(range(1,3000))),rlist,'b*')
-        plt.plot(np.array(list(range(1,3000))),olist,'b--')
-        plt.plot(np.array(list(range(1,3000))),elist,'g^')
-        plt.plot(np.array(list(range(1,3000))),alist,'r--')
-        plt.plot(np.array(list(range(1,3000))),dlist,'bs')                
-        plt.show()
+        #rlist=np.array(rlist);olist=np.array(olist);np.array(elist);np.array(alist);np.array(dlist)
+        plotGraph(rlist,olist,elist,alist,dlist,Q,A_q,Q_ast,Q_ast2)
         interested_equilibrium(e,n,v,b,c,m,Q)
         if len(tq)!=0:
             print ("Quorum time achieved at %f hrs:",tq[0]/(60.0))
