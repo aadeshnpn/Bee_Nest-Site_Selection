@@ -2,7 +2,9 @@
 Stability of Choice in the Honey Bee Nest-Site Selection Process
 
 ## Usages
-python siteselectionfinal.py
+Usages:
+python siteselectionfinal.py --single_site Y
+python siteselectionfinal.py --two_site Y
 
 ##Sample Graphs
 ![Alt tag](https://github.com/aadeshnpn/Bee_Nest-Site_Selection/blob/master/single_site_quram.png?raw=true)
